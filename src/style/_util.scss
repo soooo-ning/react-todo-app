@@ -1,0 +1,11 @@
+$main-color: #f19244;
+$main-hover: #cc7731;
+$text-color: #5e5e5e;
+$light-bg: #f8f9fa;
+$border-radius: 16px;
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+}
