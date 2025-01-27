@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { create, done } from '../store/modules/todo';
 import { useEffect, useRef } from 'react';
 import '../style/Style.scss';
+import axios from 'axios';
 
 export default function TodoList() {
   // useSelector()를 통해서 store의 state 가져오기
@@ -21,10 +22,29 @@ export default function TodoList() {
 
   console.log('nextID', nextID);
 
-  const createTodo = () => {
+  // 할 일 추가 POST /todo
+  const createTodo = async () => {
+    if (inputRef.current.value.trim() === '') return;
+
+    // state를 변경해서 화면을 바꾸는 것
     dispatch(create({ id: todoList.length + 1, text: inputRef.current.value }));
+
+    // DB 정보를 바꾸기 위해서 axios 요청
+    await axios.post(`${process.env.REACT_APP_API_SERVER}/todo`, {
+      text: inputRef.current.value,
+    });
+
     inputRef.current.value = '';
     inputRef.current.focus();
+  };
+
+  // todo 상태 변경 PATCH /todo/:todoId
+  const toDone = async id => {
+    // state를 변경해서 화면을 바꾸는 것
+    dispatch(done(id));
+
+    // DB 정보를 바꾸기 위해 axios 요청
+    await axios.patch(`${process.env.REACT_APP_API_SERVER}/todo/${id}`);
   };
 
   const enterTodo = e => {
